@@ -4,12 +4,14 @@
  */
 
 package penjat;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Penjat {
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
-        final char[][] PenjatTauler =
+        // Estat del penjat inicial.
+        final char[][] estatPenjatInicial =
       {
             {' ',' ',' ',' ','_','_','_','_',' ',' ',' ',' '},                                      
             {' ',' ',' ','|',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -23,25 +25,44 @@ public class Penjat {
             {'|','_','_','_','_','_','_','_','_','_','_','|'}
         };
         
-
-        final String[] paraules = {"patata", "armari", "bicicleta", "advocat", "ascensor", "astronauta",
-            "autopista",};
+        final String[] paraules = {"patata", "armari", "abric","bicicleta","bandera","casa","castanyes",
+        "dreta","dibuix","esquerra","esquimal","flor","flamisell","groc","gran","helicopter","hipocrita",
+        "imbecil","index","julivert","llimonada","portatil","xilofon","zebra"};
         String paraula = paraules[(int)(Math.random () * paraules.length)];
         
-     
+  
         int Encerts = 0, Errors = 0;
-
+        boolean[] lletresEncertades = new boolean[paraula.length()];
         
         String lletres = "";
-        char[][] estatPenjat = new char[PenjatTauler.length][PenjatTauler[0].length];
-        inicialitzarEstatPenjat(PenjatTauler, estatPenjat);
+        char[][] estatPenjat = new char[estatPenjatInicial.length][estatPenjatInicial[0].length];
+        inicialitzarEstatPenjat(estatPenjatInicial, estatPenjat);
         
+        do {
+            mostrarEstatPenjat(estatPenjat);
+            mostrarParaula(paraula, lletresEncertades);
+            char lletra = demanarLletra(lletres);
+            
+            if (comprovaEncerts(paraula, lletra, lletresEncertades)) {
+                Encerts += comptaEncerts(paraula, lletra);
+            } else {
+                Errors++;
+                actualitzarEstatPenjat(estatPenjat, Errors);
+            }
+            
+            lletres += lletra;
+            System.out.println("Lletres: " + lletres);
+
+        } while (Encerts < paraula.length() && Errors <= 7);
         
+ 
+        mostrarEstatPenjat(estatPenjat);
+        mostrarParaula(paraula, lletresEncertades);
         System.out.println("Lletres: " + lletres);
         if (Errors >= 7) {
-            System.out.println("OOOOOoooohhhh! Has perdut!!\nLa paraula secreta era " + paraula);
+            System.out.println("Has perdut!! La paraula era " + paraula);
         } else {
-            System.out.println("Felicitats! Has encertat la paraula secreta!!");
+            System.out.println("L'has encertat!");
         }
     }
     
@@ -87,6 +108,7 @@ public class Penjat {
         
         return resultat;
     }
+    
 
     static int comptaEncerts(String paraula, char lletra) {
         int encerts = 0;
@@ -99,25 +121,39 @@ public class Penjat {
         return encerts;
     }
     
+
     static char demanarLletra(String lletres) {
-        char lletra='a';
+        char lletra;
+        do {
+            System.out.print("Introdueix lletra: ");
+            lletra = sc.nextLine().toLowerCase().charAt(0);
+        } while (!esLletraValida(lletra, lletres));
         
         return lletra;
     }
     
-    static boolean existeixLletra(char lletra, String lletres) {
-       
-        
-        return false;
-    }
-    
-    static boolean esLletraValida(char lletra, String lletres) {
 
+    static boolean existeixLletra(char lletra, String lletres) {
+        for (int i = 0; i < lletres.length(); i++) {
+            if (lletres.charAt(i) == lletra) {
+                return true;
+            }
+        }
+        
         return false;
     }
     
-    static void actualitzarEstatPenjat(char[][] penjat, int errors) {
+
+    static boolean esLletraValida(char lletra, String lletres) {
         
+        
+        return true;
     }
     
+
+    static void actualitzarEstatPenjat(char[][] penjat, int errors) {
+       
+    }
+    
+
 }
