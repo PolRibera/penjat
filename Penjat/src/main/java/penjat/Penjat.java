@@ -4,14 +4,13 @@
  */
 
 package penjat;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Penjat {
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         // Estat del penjat inicial.
-        final char[][] estatPenjatInicial =
+        final char[][] PenjatInici =
       {
             {' ',' ',' ',' ','_','_','_','_',' ',' ',' ',' '},                                      
             {' ',' ',' ','|',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -32,22 +31,23 @@ public class Penjat {
         
   
         int Encerts = 0, Errors = 0;
-        boolean[] lletresEncertades = new boolean[paraula.length()];
+        boolean[] lletresCorrectes = new boolean[paraula.length()];
         
         String lletres = "";
-        char[][] estatPenjat = new char[estatPenjatInicial.length][estatPenjatInicial[0].length];
-        inicialitzarEstatPenjat(estatPenjatInicial, estatPenjat);
+        char[][] estatPenjat = new char[PenjatInici.length][PenjatInici[0].length];
+        inicialitzarEstatPenjat(PenjatInici, estatPenjat);
         
         do {
             mostrarEstatPenjat(estatPenjat);
-            mostrarParaula(paraula, lletresEncertades);
-            char lletra = demanarLletra(lletres);
+            mostrarParaula(paraula, lletresCorrectes);
+            System.out.print("Introdueix lletra: ");
+            char lletra = sc.nextLine().toLowerCase().charAt(0);
             
-            if (comprovaEncerts(paraula, lletra, lletresEncertades)) {
+            if (comprovaEncerts(paraula, lletra, lletresCorrectes)) {
                 Encerts += comptaEncerts(paraula, lletra);
             } else {
                 Errors++;
-                actualitzarEstatPenjat(estatPenjat, Errors);
+                PrintErrors(estatPenjat, Errors);
             }
             
             lletres += lletra;
@@ -57,7 +57,7 @@ public class Penjat {
         
  
         mostrarEstatPenjat(estatPenjat);
-        mostrarParaula(paraula, lletresEncertades);
+        mostrarParaula(paraula, lletresCorrectes);
         System.out.println("Lletres: " + lletres);
         if (Errors >= 7) {
             System.out.println("Has perdut!! La paraula era " + paraula);
@@ -109,7 +109,6 @@ public class Penjat {
         return resultat;
     }
     
-
     static int comptaEncerts(String paraula, char lletra) {
         int encerts = 0;
         for (int i = 0; i < paraula.length(); i++) {
@@ -121,39 +120,32 @@ public class Penjat {
         return encerts;
     }
     
-
-    static char demanarLletra(String lletres) {
-        char lletra;
-        do {
-            System.out.print("Introdueix lletra: ");
-            lletra = sc.nextLine().toLowerCase().charAt(0);
-        } while (!esLletraValida(lletra, lletres));
-        
-        return lletra;
-    }
-    
-
-    static boolean existeixLletra(char lletra, String lletres) {
-        for (int i = 0; i < lletres.length(); i++) {
-            if (lletres.charAt(i) == lletra) {
-                return true;
-            }
+    static void PrintErrors(char[][] penjat, int errors) {
+        switch (errors) {
+            case 1:
+                penjat[1][8] = '|';
+                break;
+            case 2:
+                penjat[2][8] = 'O';
+                break;
+            case 3:
+                penjat[3][8] = '|';
+                break;
+            case 4:
+                penjat[3][7] = '/';
+                break;
+            case 5:
+                penjat[3][9] = '\\';
+                break;
+            case 6:
+                penjat[4][8] = '|';
+                break;
+            case 7:
+                penjat[5][7] = '/';
+                break;
+            case 8:
+                penjat[5][9] = '\\';
+                break;
         }
-        
-        return false;
     }
-    
-
-    static boolean esLletraValida(char lletra, String lletres) {
-        
-        
-        return true;
-    }
-    
-
-    static void actualitzarEstatPenjat(char[][] penjat, int errors) {
-       
-    }
-    
-
 }
